@@ -316,14 +316,10 @@ export class DatepickerComponent implements OnInit, OnChanges {
   private readonly DEFAULT_FORMAT = 'YYYY-MM-DD';
 
   private dateVal: Date;
-  // two way bindings
+  // two way data binding (allows for custom output)
   @Output() dateChange = new EventEmitter<Date>();
+  @Input() date: any;
 
-  @Input() get date(): any { return new Date(this.dateVal); };
-  set date(val: any) {
-    this.dateVal = new Date(val);
-    this.dateChange.emit(val);
-  }
   // api bindings
   @Input() disabled: boolean;
   @Input() accentColor: string;
@@ -464,6 +460,7 @@ export class DatepickerComponent implements OnInit, OnChanges {
   */
   syncVisualsWithDate(): void {
     if (this.date) {
+      this.date = new Date(this.date);
       this.setInputText(this.date);
       this.setCurrentValues(this.date);
     } else {
