@@ -216,7 +216,7 @@ interface ValidationResult {
                     'border': altInputStyle ? '' : '1px solid #dadada'}"
         (click)="onInputClick()"
         [(ngModel)]="inputText"
-        readonly="true"
+        (change)="onInputChange()"
       >
       <div
         class="datepicker__calendar"
@@ -337,6 +337,7 @@ export class DatepickerComponent implements OnInit, OnChanges {
   @Input() weekStart: number = 0;
   // events
   @Output() onSelect = new EventEmitter<Date>();
+  @Output() onChange = new EventEmitter<Date>();
   // time
   @Input() calendarDays: Array<number>;
   @Input() currentMonth: string;
@@ -421,7 +422,18 @@ export class DatepickerComponent implements OnInit, OnChanges {
   */
   closeCalendar(): void {
     this.showCalendar = false;
-    this.syncVisualsWithDate();
+
+    if(this.inputText === '' || this.inputText === null) {
+       this.onSelect.emit(null);
+    } else {
+      this.syncVisualsWithDate();  
+    }
+  }
+
+  onInputChange() {
+    if(this.inputText === '' || this.inputText === null) {
+       this.onChange.emit(null);
+    }
   }
 
   /**
